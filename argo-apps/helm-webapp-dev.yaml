@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  name: helm-webapp-dev
+  namespace: argocd
+spec:
+  destination:
+    namespace: helm-webapp-dev
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+      valueFiles:
+      - values-dev.yaml
+    path: helm-webapp
+    repoURL: https://github.com/iurie-bogdanovici/argo-examples.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
